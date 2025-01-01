@@ -1,3 +1,4 @@
+import { http } from '@/lib/http/http';
 import { Forecast } from '@/lib/models/forecast';
 import { Historical } from '@/lib/models/historical';
 import { DateTime } from 'luxon';
@@ -5,14 +6,8 @@ import { DateTime } from 'luxon';
 export const dynamic = 'force-dynamic'
 export const revalidate = 300; // invalidate every hour
 
-export default async function Home() {
-  const base = process.env.NEXT_PUBLIC_API_BASE as string;
-  console.log(base);
-  const res = await fetch(`${base}`);
-  const historicalRes = await fetch(`${base}/historical`);
-
-  const data = await res.json();
-  const historicalData = await historicalRes.json();
+export default async function Home() {  
+  const [data, historicalData] = await Promise.all([http('/'), http('/historical')]);
 
   const periods = data.periods.map((period: Forecast) => {
     const startTime = DateTime.fromISO(period.startTime as unknown as string);
