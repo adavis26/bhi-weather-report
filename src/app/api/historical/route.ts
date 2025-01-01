@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
 import Papa from "papaparse";
 import fs from "fs";
+import path from "path";
 
 export async function GET() {
-    const file = fs.readFileSync("./public/data/wilmington_historical.csv", "utf8");
+    const csvFilePath = path.join(process.cwd(), 'public', 'data', 'wilmington_historical.csv');
+    const file = fs.readFileSync(csvFilePath, "utf8");
 
     const result = Papa.parse(file, {
         header: true, // Convert rows to objects using headers
         skipEmptyLines: true,
     });
 
-    const dayMonthData = (result.data as { DATE: string, TMIN: string, TMAX: string, PRCP: string }[]).reduce((acc: { [key: string]: {min: number, max: number, date: string, avgTemp: number; precipitation: number}[] }, row:  { DATE: string, TMIN: string, TMAX: string, PRCP: string }) => {
+    const dayMonthData = (result.data as { DATE: string, TMIN: string, TMAX: string, PRCP: string }[]).reduce((acc: { [key: string]: { min: number, max: number, date: string, avgTemp: number; precipitation: number }[] }, row: { DATE: string, TMIN: string, TMAX: string, PRCP: string }) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_, month, day] = row["DATE"].split("-");
 
