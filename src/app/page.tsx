@@ -24,7 +24,7 @@ export default async function Home() {
 
   const getScoreBg = (score: number): string => {
     if (score >= 10) {
-      return 'bg-green-600';
+      return 'bg-pink-300';
     } else if (score >= 9) {
       return 'bg-green-500'
     } else if (score >= 8) {
@@ -131,7 +131,7 @@ export default async function Home() {
     const start = DateTime.fromISO(startDate);
     const dates = [];
 
-    for (let i = 1; i <= 14; i++) {
+    for (let i = 1; i <= 30; i++) {
       dates.push(start.plus({ days: i }).toFormat('yyyy-MM-dd'));
     }
 
@@ -195,8 +195,6 @@ export default async function Home() {
         {historicalDataFiltered.map((day: Historical) => {
           const { score: scoreOptimistic } = predictionScoresOptimistic.find((score: { period: string; }) => score.period === day.date);
           const { score: scoreRain } = predictionScoresRain.find((score: { period: string; }) => score.period === day.date);
-
-          console.log(scoreOptimistic, scoreRain);
           const predictedScore = (scoreOptimistic + scoreRain) / 2;
 
           return (<div key={day.date} className={`p-2 border rounded grid grid-cols-3 lg:grid-cols-5 place-items-center gap-3 w-full justify-evenly ${getScoreBg(predictedScore)}`}>
