@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import fs from "fs";
 
 export async function GET() {
-    const file = fs.readFileSync("./src/assets/wilmington_historical.csv", "utf8");
+    const file = fs.readFileSync("./public/data/wilmington_historical.csv", "utf8");
 
     const result = Papa.parse(file, {
         header: true, // Convert rows to objects using headers
